@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="page-shell home-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Google Play Review Fetcher</p>
+        <h1>Fetch app reviews, preview them, and save CSV files locally.</h1>
+        <p class="intro">
+          Paste a Google Play Store URL or search URL, fetch the reviews, and keep each app export in
+          your <code>exports</code> folder.
+        </p>
+      </div>
+
+      <div class="card">
+        <form action="/reviews" method="post" class="review-form">
+          <label for="appUrl">Google Play App URL or Search URL</label>
+          <input
+            id="appUrl"
+            name="appUrl"
+            type="text"
+            placeholder="https://play.google.com/store/apps/details?id=com.instagram.android"
+            required
+          />
+
+          <label for="limit">Review limit</label>
+          <input
+            id="limit"
+            name="limit"
+            type="number"
+            min="1"
+            placeholder="Leave empty to fetch all available written reviews"
+            value="{{defaultLimit}}"
+          />
+
+          <button type="submit">Fetch Reviews</button>
+        </form>
+
+        {{#if error}}
+          <p class="message error">{{error}}</p>
+        {{/if}}
+      </div>
+    </section>
+
+    <section class="saved-section card">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Saved Exports</p>
+          <h2>Your downloaded review files</h2>
+        </div>
+      </div>
+
+      {{#if savedExports.length}}
+        <div class="saved-grid">
+          {{#each savedExports}}
+            <article class="saved-card">
+              <h3>{{fileName}}</h3>
+              <p class="meta">Updated: {{updatedAt}}</p>
+              <p class="meta">Size: {{sizeKb}}</p>
+              <a class="secondary-link full-width" href="/downloads/{{fileName}}">Download CSV</a>
+            </article>
+          {{/each}}
+        </div>
+      {{else}}
+        <p class="meta empty-state">No CSV files saved yet. Export one app review file and it will appear here.</p>
+      {{/if}}
+    </section>
+  </div>
+</body>
+</html>

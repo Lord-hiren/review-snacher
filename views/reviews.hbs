@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="review-page">
+  <div class="page-shell review-shell">
+    <section class="topbar">
+      <div>
+        <p class="eyebrow">Review Preview</p>
+        <h1>{{appName}}</h1>
+        <p class="meta">Package: {{packageName}}</p>
+        <p class="meta">CSV file: <code>{{fileName}}</code></p>
+      </div>
+      <a href="/" class="secondary-link">Back Home</a>
+    </section>
+
+    {{#if success}}
+      <p class="message success">{{success}}</p>
+    {{/if}}
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <p>Total reviews</p>
+        <strong>{{formatNumber totalReviews}}</strong>
+      </article>
+      <article class="summary-card">
+        <p>Average rating</p>
+        <strong>{{formatScore summary.averageRating}}</strong>
+      </article>
+      <article class="summary-card">
+        <p>Positive</p>
+        <strong>{{formatNumber summary.positiveCount}}</strong>
+      </article>
+      <article class="summary-card">
+        <p>Negative</p>
+        <strong>{{formatNumber summary.negativeCount}}</strong>
+      </article>
+    </section>
+
+    <section class="card action-card review-actions">
+      <form action="/reviews/export" method="post" class="inline-form">
+        <input type="hidden" name="appUrl" value="{{appUrl}}" />
+        <input type="hidden" name="limit" value="{{limit}}" />
+        <button type="submit">Append Reviews To CSV</button>
+      </form>
+      <a class="secondary-link" href="/downloads/{{fileName}}">Download Current CSV</a>
+      <p class="meta">Saved path: <code>{{csvPath}}</code></p>
+    </section>
+
+    {{#if summary.topTags.length}}
+      <section class="card">
+        <h2>Top Tags</h2>
+        <div class="tag-row">
+          {{#each summary.topTags}}
+            <span class="tag-chip">{{tag}} ({{count}})</span>
+          {{/each}}
+        </div>
+      </section>
+    {{/if}}
+
+    <section class="reviews-grid">
+      {{#each reviews}}
+        <article class="review-card">
+          <div class="review-head">
+            <div>
+              <h3>{{reviewerName}}</h3>
+              <p class="meta">Rating: {{rating}} | {{reviewDate}}</p>
+            </div>
+            <div class="pill-group">
+              <span class="pill">{{sentiment}}</span>
+              <span class="pill muted">{{tag}}</span>
+            </div>
+          </div>
+
+          <p class="review-text">{{reviewText}}</p>
+
+          <div class="review-foot">
+            <span>Version: {{appVersion}}</span>
+            <span>Score: {{sentimentScore}}</span>
+          </div>
+        </article>
+      {{/each}}
+    </section>
+  </div>
+</body>
+</html>
